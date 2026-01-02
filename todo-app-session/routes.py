@@ -76,7 +76,20 @@ def create_todo():
 
 @routes.route('/todo/update')
 def update_todo():
-  ...
+  todo_id = request.args.get("todo_id")
+  action = request.args.get('action')
+
+  todo = Todo.query.filter_by(id=todo_id).first()
+  if not todo:
+    return jsonify({'success': False, 'message': 'Todo not found'})
+
+  if action == 'mark_done':
+    todo.is_done = not todo.is_done
+  elif action == 'mark_starred':
+    todo.is_starred = not todo.is_starred
+
+  db.session.commit()
+  return jsonify({'success': True, 'message': 'Todo updated'})
 
 
 @routes.route('/todo/delete')

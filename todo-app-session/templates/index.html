@@ -24,6 +24,10 @@
         justify-content: space-around;
         gap: 1rem;
       }
+      .done {
+        text-decoration: line-through;
+        opacity: 0.6;
+      }
     </style>
   </head>
   <body>
@@ -63,6 +67,8 @@
 
       document.querySelector('form').addEventListener('submit', handleLogin);
 
+      const html = String.raw;
+
       async function handleLogin(event) {
         event.preventDefault();
 
@@ -91,6 +97,21 @@
         document.querySelector('#auth-result').textContent = data.message;
       }
 
+      async function markDone(id) {
+        const res = await fetch(
+          `http://127.0.0.1:5000/todo/update?todo_id=${id}&action=mark_done&session_id=${sessionId}&token=${token}`
+        );
+        const data = await res.json();
+
+        if (data.success) {
+          console.log(data);
+        } else {
+          console.error(data);
+        }
+        data;
+        fetchTodos();
+      }
+
       async function fetchTodos() {
         const response = await fetch(
           `http://127.0.0.1:5000/todo/list?session_id=${sessionId}&token=${token}`
@@ -100,11 +121,28 @@
         if (data.success) {
           console.log(data);
           todos = data.payload.todos;
-          for (let todo of todos) {
-            document
-              .querySelector('#todos')
-              .insertAdjacentHTML('beforeend', `<li>${todo.text}</li>`);
-          }
+        }
+
+        renderTodos(data.payload.todos);
+      }
+
+      function renderTodos(todos) {
+        console.log(todos[2].id);
+
+        document.querySelector('#todos').innerHTML = '';
+        for (let todo of todos) {
+          console.log(todo);
+
+          document.querySelector('#todos').insertAdjacentHTML(
+            'beforeend',
+            html`
+              <li>
+                <span class="${todo.is_done ? 'done' : 'empty'}" onclick="markDone(${todo.id})"
+                  >${todo.text}</span
+                >
+              </li>
+            `
+          );
         }
       }
     </script>
