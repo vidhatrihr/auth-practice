@@ -9,6 +9,40 @@ if (sessionId && token) {
 
 document.querySelector('form').addEventListener('submit', handleLogin);
 
+function renderTodos(todos) {
+  document.querySelector('#todos').innerHTML = '';
+  for (let todo of todos) {
+    document.querySelector('#todos').insertAdjacentHTML(
+      'beforeend',
+      html`
+        <li>
+          <span class="${todo.isDone ? 'done' : 'empty'}" onclick="markDone(${todo.id})"
+            >${todo.text}</span
+          >
+        </li>
+      `
+    );
+  }
+}
+
+async function api(path, params = {}) {
+  const query = new URLSearchParams({
+    ...params,
+    sessionId,
+    token,
+  }).toString();
+
+  const response = await fetch(`http://127.0.0.1:5000${path}?${query}`);
+  const data = await response.json();
+
+  if (data.success) {
+    console.log(data);
+  } else {
+    console.error(data);
+  }
+  return data;
+}
+
 async function handleLogin(event) {
   event.preventDefault();
 
@@ -38,45 +72,16 @@ async function handleLogin(event) {
 }
 
 async function markDone(id) {
-  const res = await fetch(
-    `http://127.0.0.1:5000/todo/update?todo_id=${id}&action=mark_done&session_id=${sessionId}&token=${token}`
-  );
-  const data = await res.json();
-
-  if (data.success) {
-    console.log(data);
-  } else {
-    console.error(data);
-  }
+  await api('/todo/update', {
+    todoId: id,
+    action: 'markDone',
+  });
 
   fetchTodos();
 }
 
 async function fetchTodos() {
-  const response = await fetch(
-    `http://127.0.0.1:5000/todo/list?session_id=${sessionId}&token=${token}`
-  );
-  const data = await response.json();
-
-  if (data.success) {
-    console.log(data);
-  }
+  const data = await api('/todo/list');
 
   renderTodos(data.payload.todos);
-}
-
-function renderTodos(todos) {
-  document.querySelector('#todos').innerHTML = '';
-  for (let todo of todos) {
-    document.querySelector('#todos').insertAdjacentHTML(
-      'beforeend',
-      html`
-        <li>
-          <span class="${todo.isDone ? 'done' : 'empty'}" onclick="markDone(${todo.id})"
-            >${todo.text}</span
-          >
-        </li>
-      `
-    );
-  }
 }

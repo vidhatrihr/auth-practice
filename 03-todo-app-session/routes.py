@@ -44,7 +44,7 @@ def login():
 
 @routes.route('/todo/list')
 def list_todos():
-  session_id = request.args.get('session_id')
+  session_id = request.args.get('sessionId')
   token = request.args.get('token')
 
   session = Session.query.filter_by(id=session_id).first()
@@ -77,16 +77,16 @@ def create_todo():
 
 @routes.route('/todo/update')
 def update_todo():
-  todo_id = request.args.get("todo_id")
+  todo_id = request.args.get("todoId")
   action = request.args.get('action')
 
   todo = Todo.query.filter_by(id=todo_id).first()
   if not todo:
     return jsonify({'success': False, 'message': 'Todo not found'})
 
-  if action == 'mark_done':
+  if action == 'markDone':
     todo.is_done = not todo.is_done
-  elif action == 'mark_starred':
+  elif action == 'markStarred':
     todo.is_starred = not todo.is_starred
 
   db.session.commit()
