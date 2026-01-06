@@ -16,23 +16,47 @@ function renderTodos(todos) {
       'beforeend',
       html`
         <li>
-          <span class="${todo.isDone ? 'done' : 'empty'}" onclick="markDone(${todo.id})"
-            >${todo.text}</span
-          >
+          <span class="${todo.isDone ? 'done' : ''}" onclick="markDone(${todo.id})"
+            >${todo.text}
+          </span>
+
+          <span class="${todo.isStarred ? 'star' : ''}" onclick="markStarred(${todo.id})"
+            >${todo.isStarred ? '★' : '☆'}
+          </span>
         </li>
       `
     );
   }
 }
 
-async function api(path, params = {}) {
-  const query = new URLSearchParams({
-    ...params,
-    sessionId,
-    token,
-  }).toString();
+async function api(method, path, params = {}) {
+  const options = {
+    method: method,
+  };
 
-  const response = await fetch(`http://127.0.0.1:5000${path}?${query}`);
+  let url;
+
+  if (method == 'get') {
+    const query = new URLSearchParams({
+      ...params,
+      sessionId,
+      token,
+    }).toString();
+
+    url = `http://127.0.0.1:5000${path}?${query}`;
+  }
+
+  if (method == 'post') {
+    options.headers = {
+      'Content-Type': 'application/json',
+    };
+
+    options.body = JSON.stringify(params);
+
+    url = `http://127.0.0.1:5000${path}`;
+  }
+
+  const response = await fetch(url, options);
   const data = await response.json();
 
   if (data.success) {
@@ -46,15 +70,9 @@ async function api(path, params = {}) {
 async function handleLogin(event) {
   event.preventDefault();
 
-  const response = await fetch('http://127.0.0.1:5000/auth/login', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email: document.querySelector('#email').value,
-      password: document.querySelector('#password').value,
-    }),
+  const response = await api('post', '/auth/login', {
+    email: email.value,
+    password: password.value,
   });
 
   const data = await response.json();
@@ -71,8 +89,14 @@ async function handleLogin(event) {
   document.querySelector('#auth-result').textContent = data.message;
 }
 
+async function fetchTodos() {
+  const data = await api('get', '/todo/list');
+
+  renderTodos(data.payload.todos);
+}
+
 async function markDone(id) {
-  await api('/todo/update', {
+  await api('get', '/todo/update', {
     todoId: id,
     action: 'markDone',
   });
@@ -80,8 +104,10 @@ async function markDone(id) {
   fetchTodos();
 }
 
-async function fetchTodos() {
-  const data = await api('/todo/list');
-
-  renderTodos(data.payload.todos);
+async function markStarred(id) {
+  await api('get', '/todo/update', {
+    todoId: id,
+    action: 'markStarred',
+  });
+  fetchTodos();
 }
