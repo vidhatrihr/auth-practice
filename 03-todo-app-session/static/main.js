@@ -50,7 +50,6 @@ async function api(method, path, params = {}) {
     options.headers = {
       'Content-Type': 'application/json',
     };
-
     options.body = JSON.stringify(params);
 
     url = `http://127.0.0.1:5000${path}`;
@@ -78,14 +77,12 @@ async function handleLogin(event) {
   const data = await response.json();
 
   if (data.success) {
-    console.log(data);
     sessionId = data.payload.sessionId;
     token = data.payload.token;
     localStorage.setItem('sessionId', sessionId);
     localStorage.setItem('token', token);
-  } else {
-    console.error(data);
   }
+
   document.querySelector('#auth-result').textContent = data.message;
 }
 
