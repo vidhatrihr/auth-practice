@@ -101,7 +101,7 @@ def launch():
     return jsonify({
         'success': False,
         'message': 'you cannot launch missile'
-    })
+    }), 401
 
 
 app.run(debug=True)
