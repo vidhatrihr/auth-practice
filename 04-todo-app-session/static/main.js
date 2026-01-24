@@ -14,6 +14,7 @@ async function api(method, path, params = {}) {
     method: method,
   };
   let url;
+
   if (method == 'get') {
     const query = new URLSearchParams({
       ...params,
@@ -69,7 +70,7 @@ async function renderTodos(todos) {
             >${todo.isStarred ? '★' : '☆'}</span
           >
         </li>
-      `
+      `,
     );
   }
 }
@@ -77,7 +78,9 @@ async function renderTodos(todos) {
 async function fetchTodos() {
   const data = await api('get', '/todo/list');
 
-  renderTodos(data.payload.todos);
+  if (data.success) {
+    renderTodos(data.payload.todos);
+  }
 }
 
 async function handleCreateTodo(event) {

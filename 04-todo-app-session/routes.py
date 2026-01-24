@@ -18,7 +18,7 @@ def whoami(session):
   user = User.query.filter_by(id=session.user_id).first()
   return jsonify({
       'success': True,
-      'message': f'logged in as {user.name}'
+      'message': f'Logged in as {user.name}'
   })
 
 
@@ -50,17 +50,18 @@ def login():
   else:
     return jsonify({
         'success': False,
-        'message': 'email or password incorrect'
-    })
+        'message': 'Email or password incorrect'
+    }), 401
 
 
 @routes.route('/todo/list')
 @login_required
 def list_todos(session):
   todos = Todo.query.filter_by(user_id=session.user_id).all()
+
   return jsonify({
       'success': True,
-      'message': 'all todos are fetched',
+      'message': 'All todos are fetched',
       'payload': {
           'todos': [
               {
@@ -79,13 +80,14 @@ def list_todos(session):
 @login_required
 def create_todos(session):
   text = request.json.get('text')
+
   db.session.add(Todo(
       text=text,
       user_id=session.user_id,
   ))
   db.session.commit()
 
-  return jsonify({'success': True, 'message': 'todo is created'})
+  return jsonify({'success': True, 'message': 'Todo is created'})
 
 
 @routes.route('/todo/update')
