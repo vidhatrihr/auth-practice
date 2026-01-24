@@ -1,8 +1,10 @@
+import time
 from flask import Blueprint, render_template, request, jsonify
-from models import User, Session, db, Todo
 from werkzeug.security import check_password_hash
-from utils import generate_token
+from jwt import jwt_encode
+from models import db, User, Todo
 from decorators import login_required
+
 
 routes = Blueprint('routes', __name__)
 
@@ -14,8 +16,8 @@ def index():
 
 @routes.route('/auth/whoami')
 @login_required
-def whoami(session):
-  user = User.query.filter_by(id=session.user_id).first()
+def whoami(user_id):
+  user = User.query.filter_by(id=user_id).first()
   return jsonify({
       'success': True,
       'message': f'Logged in as {user.name}'
@@ -30,22 +32,18 @@ def login():
   user = User.query.filter_by(email=email).first()
 
   if user and check_password_hash(user.password, password):
-    session = Session(
-        token=generate_token(),
-        user_id=user.id,
-    )
-
-    db.session.add(session)
-    db.session.commit()
-
     response = jsonify({
         'success': True,
         'message': f'Logged in as {user.name}'
     })
 
-    response.set_cookie('sessionId', str(session.id), httponly=True)
-    response.set_cookie('token', session.token, httponly=True)
+    payload = {
+        'user_id': user.id,
+        'iat': time.time()
+    }
+    jwt = jwt_encode(payload)
 
+    response.set_cookie('jwt', jwt, httponly=True)
     return response
   else:
     return jsonify({
@@ -56,8 +54,8 @@ def login():
 
 @routes.route('/todo/list')
 @login_required
-def list_todos(session):
-  todos = Todo.query.filter_by(user_id=session.user_id).all()
+def list_todos(user_id):
+  todos = Todo.query.filter_by(user_id=user_id).all()
 
   return jsonify({
       'success': True,
@@ -78,12 +76,12 @@ def list_todos(session):
 
 @routes.route('/todo/create', methods=['POST'])
 @login_required
-def create_todos(session):
+def create_todos(user_id):
   text = request.json.get('text')
 
   db.session.add(Todo(
       text=text,
-      user_id=session.user_id,
+      user_id=user_id,
   ))
   db.session.commit()
 
@@ -92,7 +90,7 @@ def create_todos(session):
 
 @routes.route('/todo/update')
 @login_required
-def update_todo(session):
+def update_todo(user_id):
   todo_id = request.args.get('todoId')
   action = request.args.get('action')
 
@@ -109,7 +107,7 @@ def update_todo(session):
 
 @routes.route('/todo/delete')
 @login_required
-def delete_todo(session):
+def delete_todo(user_id):
   todo_id = request.args.get('todoId')
 
   todo = Todo.query.filter_by(id=todo_id).first()

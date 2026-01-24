@@ -51,4 +51,5 @@ def jwt_decode(encoded: str) -> dict:
   if not hmac.compare_digest(signature, expected_signature):
     raise Exception('Invalid token')
 
-  return json.loads(b64url_decode(payload_64))
+  payload = json.loads(b64url_decode(payload_64))
+  return payload

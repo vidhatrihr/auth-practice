@@ -12,14 +12,6 @@ class User(db.Model):
   password = Column(String)
 
 
-class Session(db.Model):
-  __tablename__ = 'sessions'
-  id = Column(Integer, autoincrement=True, primary_key=True)
-  session = Column(String)
-  token = Column(String)
-  user_id = Column(Integer)
-
-
 class Todo(db.Model):
   __tablename__ = 'todos'
   id = Column(Integer, autoincrement=True, primary_key=True)
