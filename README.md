@@ -76,7 +76,7 @@ This application serves as a baseline for the more advanced to-do applications. 
   - **Logout:** The application includes a logout feature that deletes the user's session from the database.
   - **Logout Everywhere:** This feature invalidates all active sessions for a user, which is useful for security purposes.
 - **Key Files:**
-  - `routes.py`: Includes the login, logout, and "logout everywhere" routes.
+  - `routes.py`: Implements login, logout, and logout-everywhere functionality.
   - `utils.py`: The `validate_session` function is updated to read the session information from the request cookies.
 
 ### 5. To-Do App with JWT
@@ -105,7 +105,6 @@ This application serves as a baseline for the more advanced to-do applications. 
 - **Security Note:** Deleting session entries from the database won't immediately invalidate existing JWTs. They will remain active for a maximum of the remaining token duration (e.g., 10 minutes). This is a necessary compromise. For added security, this duration can be reduced to five or two minutes.
 - **Key Files:**
   - `decorators.py`: Handles the logic for checking token expiration and regenerating tokens if the session is valid.
-  - `routes.py`: Implements login, logout, and logout-everywhere functionality.
 
 ---
 
