@@ -1,10 +1,10 @@
 # Flask Session and JWT Authentication Demo
 
-This repository is a comprehensive guide to understanding and implementing various authentication and session management techniques in Flask. It features a series of progressively complex demo applications, starting from a basic, unauthenticated setup and culminating in a secure to-do application using JSON Web Tokens (JWT).
+This is a demo that I created for understanding and implementing various authentication and session management techniques in Flask. It features a series of progressively complex demo applications, starting from a basic, unauthenticated setup and culminating in a secure to-do application using JSON Web Tokens (JWT).
 
 ## Learning Objectives
 
-By exploring this repository, you will learn about:
+These are my learning objectives while I was doing these demonstrations:
 
 - The fundamentals of web authentication and session management.
 - The differences between session-based and token-based authentication.
@@ -13,10 +13,13 @@ By exploring this repository, you will learn about:
 - How to use HTTP-only cookies to securely store session information.
 - The principles of JSON Web Tokens (JWT) and how to implement them from scratch.
 - How to build a stateless authentication system using JWT.
+- Understanding the bytes data structure.
+- Understanding ASCII character set.
+- Understanding Base64.
 
 ## Notebooks
 
-To deepen your understanding of the core concepts, this repository includes several Jupyter notebooks:
+This is just me exploring concepts.
 
 - **`base64-implementation.ipynb`**: A from-scratch implementation of Base64 encoding and decoding, a fundamental component of JWT.
 - **`jwt-implementation.ipynb`**: A detailed, from-scratch implementation of JWT, including token creation, signing, and verification.
