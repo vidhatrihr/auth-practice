@@ -53,7 +53,7 @@ This application serves as a baseline for the more advanced to-do applications. 
 
 - **Folder:** `02.2-basic-todo-app`
 - **Description:** An improved version of the basic to-do app that uses a `Todo` class to represent to-do items and a dictionary to store them. This version demonstrates a more structured approach to data management, with the `Todo` class handling the auto-incrementing of IDs.
-- **Functionality:** Same as version 2.1.
+- **Functionality:** Adds ability to mark "done" or "starred". Unlike the previous version, which stored simple text strings, this version uses `Todo` objects, allowing individual properties to be updated.
 
 ### 3. To-Do App with Session (Local Storage)
 
