@@ -94,7 +94,7 @@ This application serves as a baseline for the more advanced to-do applications. 
   - `decorators.py`: The `login_required` decorator is updated to use the `verify_jwt` function to authenticate users.
   - `routes.py`: The login route is modified to generate and set the JWT cookie.
 
-### 6. To-Do App with JWT and Session Regeneration
+### 6. To-Do App with JWT and Session [Token Regeneration]
 
 - **Folder:** `06-todo-app-jwt-with-session`
 - **Description:** This application extends the JWT implementation by adding token regeneration capabilities backed by database sessions. It introduces a hybrid approach to handle authentication and logout.
