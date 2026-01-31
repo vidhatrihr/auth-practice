@@ -13,7 +13,7 @@ class Todo:
     self.id = Todo.next_id
     self.text = text
     self.is_done = False
-    self.id_starred = False
+    self.is_starred = False
 
     Todo.next_id += 1  # id autoincrement
     Todo.table[self.id] = self  # Add to table, self refers to current object
@@ -23,7 +23,7 @@ class Todo:
         "id": self.id,
         "text": self.text,
         "isDone": self.is_done,
-        "idStarred": self.id_starred,
+        "isStarred": self.is_starred,
     }
 
 
@@ -61,7 +61,7 @@ def update_todo(todo_id):
   if action == 'markDone':
     todo.is_done = not todo.is_done
   elif action == 'markStarred':
-    todo.id_starred = not todo.id_starred
+    todo.is_starred = not todo.is_starred
 
   return jsonify({'message': 'Todo updated'})
 

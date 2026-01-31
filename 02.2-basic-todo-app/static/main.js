@@ -10,10 +10,12 @@ async function loadTodos() {
     document.querySelector('#todo-list').insertAdjacentHTML(
       'beforeend',
       html`<li>
-        ${todo.idStarred ? '⭐ ' : ''}
+        ${todo.isStarred ? '⭐ ' : ''}
         <span class="${todo.isDone ? 'done' : ''}">${todo.text}</span>
-        <button onclick="markDone(${todo.id})">done</button>
-        <button onclick="markStarred(${todo.id})">star</button>
+        <button onclick="markDone(${todo.id})">${todo.isDone ? 'undone' : 'done'}</button>
+        <button onclick="markStarred(${todo.id})">
+          ${todo.isStarred ? 'unstar' : 'star'}
+        </button>
         <button onclick="deleteTodo(${todo.id})">delete</button>
       </li>`,
     );
