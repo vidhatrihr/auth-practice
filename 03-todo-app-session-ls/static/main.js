@@ -44,7 +44,7 @@ async function api(method, path, params = {}) {
 
   if (method == 'get') {
     const query = new URLSearchParams(params).toString();
-    url = `http://127.0.0.1:5000${path}?${query}`;
+    url = `http://127.0.0.1:5030${path}?${query}`;
   }
 
   if (method == 'post') {
@@ -52,7 +52,7 @@ async function api(method, path, params = {}) {
       'Content-Type': 'application/json',
     };
     options.body = JSON.stringify(params);
-    url = `http://127.0.0.1:5000${path}`;
+    url = `http://127.0.0.1:5030${path}`;
   }
 
   const response = await fetch(url, options);

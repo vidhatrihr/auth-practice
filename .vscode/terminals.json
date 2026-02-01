@@ -1,0 +1,61 @@
+{
+  "autorun": true,
+  "autokill": true,
+  "terminals": [
+    {
+      "name": "01-missile",
+      "icon": "rocket",
+      "commands": ["cd 01-launch-missile-session", "python app.py"]
+    },
+    {
+      "name": "02.1-todo",
+      "icon": "checklist",
+      "commands": ["cd 02.1-basic-todo-app", "python app.py"]
+    },
+    {
+      "name": "02.2-todo",
+      "icon": "checklist",
+      "commands": ["cd 02.2-basic-todo-app", "python app.py"]
+    },
+    {
+      "name": "03-session-ls",
+      "icon": "database",
+      "commands": ["cd 03-todo-app-session-ls", "python app.py"]
+    },
+    {
+      "name": "04-cookies",
+      "icon": "key",
+      "commands": ["cd 04-todo-app-session-cookies", "python app.py"]
+    },
+    {
+      "name": "05-jwt",
+      "icon": "lock",
+      "commands": ["cd 05-todo-app-jwt", "python app.py"]
+    },
+    {
+      "name": "06-jwt-session",
+      "icon": "shield",
+      "commands": ["cd 06-todo-app-jwt-with-session", "python app.py"]
+    },
+    {
+      "name": "07-final",
+      "icon": "star-full",
+      "commands": ["cd 07-final-todo-app", "python app.py"]
+    },
+    {
+      "name": "open-browsers",
+      "icon": "browser",
+      "commands": [
+        "timeout /t 3",
+        "start http://127.0.0.1:5010",
+        "start http://127.0.0.1:5021",
+        "start http://127.0.0.1:5022",
+        "start http://127.0.0.1:5030",
+        "start http://127.0.0.1:5041",
+        "start http://127.0.0.1:5050",
+        "start http://127.0.0.1:5065",
+        "start http://127.0.0.1:5070"
+      ]
+    }
+  ]
+}

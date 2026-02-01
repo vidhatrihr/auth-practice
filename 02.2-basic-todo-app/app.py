@@ -1,3 +1,4 @@
+import sys
 from flask import Flask, render_template, jsonify, request
 
 # ⚠️ There is no authentication in this app
@@ -73,4 +74,5 @@ def delete_todo(todo_id):
 
 
 if __name__ == '__main__':
-  app.run(debug=True)
+  port = int(sys.argv[1]) if len(sys.argv) > 1 else 5022
+  app.run(debug=True, port=port)
