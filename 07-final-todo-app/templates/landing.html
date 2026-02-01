@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Todo App</title>
+    <link rel="stylesheet" href="static/style.css">
+    <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+  </head>
+  <body>
+    <main class="main-wider">
+      <section class="landing-hero">
+        <h1>
+          <iconify-icon icon="mdi:checkbox-marked-circle-outline"></iconify-icon> Welcome to Todo App
+        </h1>
+        <p>A simple and secure to-do application with JWT session authentication.</p>
+        <div class="landing-buttons">
+          <a href="/login" class="btn btn-primary">
+            <iconify-icon icon="mdi:login"></iconify-icon> Login
+          </a>
+          <a href="/app" class="btn btn-secondary">
+            <iconify-icon icon="mdi:application"></iconify-icon> Go to App
+          </a>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="features">
+
+        <!-- Technology Stack -->
+        <article>
+          <h2>
+            <iconify-icon icon="mdi:layers-triple"></iconify-icon> Technology Stack
+          </h2>
+          <ul>
+            <li>
+              <strong><iconify-icon icon="mdi:language-python"></iconify-icon> Flask Server</strong>
+              <p>
+                A lightweight Python web framework that handles routing, request processing, and serves both HTML templates and JSON API responses.
+              </p>
+            </li>
+            <li>
+              <strong><iconify-icon icon="mdi:database"></iconify-icon> SQLite with SQLAlchemy</strong>
+              <p>
+                SQLite provides a simple file-based database, while SQLAlchemy acts as an ORM (Object-Relational Mapper) to interact with the database using Python objects instead of raw SQL queries.
+              </p>
+            </li>
+            <li>
+              <strong><iconify-icon icon="mdi:vuejs"></iconify-icon> Vue.js (CDN)</strong>
+              <p>
+                A progressive JavaScript framework loaded directly from a CDN. It powers the reactive user interface without requiring a build step or complex tooling.
+              </p>
+            </li>
+          </ul>
+        </article>
+
+        <!-- Authentication Flow -->
+        <article>
+          <h2>
+            <iconify-icon icon="mdi:shield-lock"></iconify-icon> Authentication Flow
+          </h2>
+          <ol>
+            <li>
+              <strong><iconify-icon icon="mdi:form-textbox-password"></iconify-icon> User Login</strong>
+              <p>
+                Navigate to the login page and enter your email and password. The credentials are sent to the server via a POST request.
+              </p>
+            </li>
+            <li>
+              <strong><iconify-icon icon="mdi:check-decagram"></iconify-icon> Server Verification</strong>
+              <p>
+                The server validates the credentials against the database. If they match, a JWT (JSON Web Token) is generated containing the user's identity and an expiration timestamp.
+              </p>
+            </li>
+            <li>
+              <strong><iconify-icon icon="mdi:cookie"></iconify-icon> Token Stored as Cookie</strong>
+              <p>
+                The JWT is sent back to the browser as an HTTP-only cookie. This cookie is automatically attached to every subsequent request.
+              </p>
+            </li>
+            <li>
+              <strong><iconify-icon icon="mdi:api"></iconify-icon> Making Authenticated Requests</strong>
+              <p>
+                When you access protected routes (like the todo app), the browser automatically includes the JWT cookie. The server decodes and verifies the token on each request.
+              </p>
+            </li>
+            <li>
+              <strong><iconify-icon icon="mdi:shield-check"></iconify-icon> Token Integrity Check</strong>
+              <p>
+                The server checks that the token hasn't been tampered with using a secret key. If valid, the request is processed. If the token is invalid or expired, the server responds with a 401 Unauthorized error.
+              </p>
+            </li>
+          </ol>
+        </article>
+
+        <!-- Key Learnings -->
+        <article>
+          <h2>
+            <iconify-icon icon="mdi:lightbulb-on"></iconify-icon> Key Learnings
+          </h2>
+          <ul>
+            <li>
+              <strong><iconify-icon icon="mdi:function-variant"></iconify-icon> Login Required Decorator</strong>
+              <p>
+                A Python decorator that wraps protected routes. It extracts the JWT from the cookie, verifies it, and injects the current user into the request context. If authentication fails, it returns an error before the route logic executes.
+              </p>
+            </li>
+            <li>
+              <strong><iconify-icon icon="mdi:file-code"></iconify-icon> JWT Encoding & Decoding</strong>
+              <p>
+                JWTs are encoded using a secret key and an algorithm (like HS256). The token contains a payload (user data, expiration time) that can be decoded and verified by the server.
+              </p>
+            </li>
+            <li>
+              <strong><iconify-icon icon="mdi:shield-star"></iconify-icon> Strength of JWT</strong>
+              <p>
+                JWTs are self-contained and stateless — the server doesn't need to store session data. They're cryptographically signed, so any tampering invalidates the token. This makes them ideal for distributed systems.
+              </p>
+            </li>
+            <li>
+              <strong><iconify-icon icon="mdi:timer-refresh"></iconify-icon> Token Expiration & Regeneration</strong>
+              <p>
+                Tokens include an expiration timestamp. Once expired, the user must re-authenticate. This limits the damage if a token is compromised and encourages regular credential refresh.
+              </p>
+            </li>
+            <li>
+              <strong><iconify-icon icon="mdi:monitor-dashboard"></iconify-icon> Vue.js Reactive UI</strong>
+              <p>
+                Vue's reactivity system automatically updates the DOM when data changes. The Options API with <code>data</code> and <code>methods</code> provides a simple, organized structure for component logic.
+              </p>
+            </li>
+            <li>
+              <strong><iconify-icon icon="mdi:cloud-sync"></iconify-icon> Async Functions & Fetch API</strong>
+              <p>
+                JavaScript's <code>async/await</code> syntax makes asynchronous code readable. The Fetch API is used to make HTTP requests to the backend, returning promises that resolve with the server's response.
+              </p>
+            </li>
+          </ul>
+        </article>
+
+      </section>
+    </main>
+  </body>
+</html>
