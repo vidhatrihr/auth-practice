@@ -29,34 +29,40 @@ def verify_jwt():
   return None
 
 
-def login_required(fn):
-  # How many parameters defined by view function (fn)
-  count_parameters = len(inspect.signature(fn).parameters)
+def login_required(role=None):
+  def decorator(fn):
+    # How many parameters defined by view function (fn)
+    count_parameters = len(inspect.signature(fn).parameters)
 
-  @wraps(fn)
-  def wrapper(*args, **kwargs):
-    payload = verify_jwt()
-    new_token = None
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+      payload = verify_jwt()
+      new_token = None
 
-    if not payload:
-      return jsonify({'success': False, 'message': 'Unauthorized'}), 401
-
-    # Check if the token has expired
-    if time.time() > payload['iat'] + TOKEN_EXPIRATION_SECONDS:
-      session = Session.query.filter_by(id=payload['session_id']).first()
-      if session:
-        payload['iat'] = int(time.time())
-        new_token = jwt_encode(payload)
-      else:
+      if not payload:
         return jsonify({'success': False, 'message': 'Unauthorized'}), 401
 
-    if count_parameters == 0:
-      response = fn(*args, **kwargs)  # Not passing payload
-    else:
-      response = fn(payload, *args, **kwargs)  # Passing payload as the first parameter
+      # Check role if specified
+      if role and payload.get('role') != role:
+        return jsonify({'success': False, 'message': 'Forbidden'}), 403
 
-    if new_token:
-      response.set_cookie('jwt', new_token, httponly=True)
-    return response
+      # Check if the token has expired
+      if time.time() > payload['iat'] + TOKEN_EXPIRATION_SECONDS:
+        session = Session.query.filter_by(id=payload['session_id']).first()
+        if session:
+          payload['iat'] = int(time.time())
+          new_token = jwt_encode(payload)
+        else:
+          return jsonify({'success': False, 'message': 'Unauthorized'}), 401
 
-  return wrapper
+      if count_parameters == 0:
+        response = fn(*args, **kwargs)  # Not passing payload
+      else:
+        response = fn(payload, *args, **kwargs)  # Passing payload as the first parameter
+
+      if new_token:
+        response.set_cookie('jwt', new_token, httponly=True)
+      return response
+
+    return wrapper
+  return decorator

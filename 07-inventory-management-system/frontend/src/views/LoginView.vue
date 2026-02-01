@@ -1,43 +1,40 @@
-<script>
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { api } from '@/utils/api';
 import { authStore } from '@/stores/auth';
+import { Icon } from '@iconify/vue';
 
-export default {
-  name: 'LoginView',
-  data() {
-    return {
-      email: '',
-      password: '',
-      error: null,
-    };
-  },
-  methods: {
-    async handleLogin() {
-      this.error = null;
+const router = useRouter();
 
-      const data = await api('post', '/auth/login', {
-        email: this.email,
-        password: this.password,
-      });
+const email = ref('');
+const password = ref('');
+const error = ref(null);
 
-      if (data.success) {
-        authStore.setToken(data.data.token);
-        authStore.setUser(data.data.name, data.data.role);
+async function handleLogin() {
+  error.value = null;
 
-        // Redirect based on role
-        if (data.data.role === 'admin') {
-          this.$router.push('/admin');
-        } else if (data.data.role === 'manager') {
-          this.$router.push('/manager');
-        } else {
-          this.$router.push('/');
-        }
-      } else {
-        this.error = data.message;
-      }
-    },
-  },
-};
+  const res = await api('post', '/auth/login', {
+    email: email.value,
+    password: password.value,
+  });
+
+  if (res.success) {
+    authStore.setToken(res.data.token);
+    authStore.setUser(res.data.name, res.data.role);
+
+    // Redirect based on role
+    if (res.data.role === 'admin') {
+      router.push('/admin');
+    } else if (res.data.role === 'manager') {
+      router.push('/manager');
+    } else {
+      router.push('/');
+    }
+  } else {
+    error.value = res.message;
+  }
+}
 </script>
 
 <template>
@@ -48,12 +45,16 @@ export default {
 
       <form class="login-form" @submit.prevent="handleLogin">
         <div class="form-group">
-          <label for="email">Email</label>
+          <label for="email"
+            ><span class="icon-text"><Icon icon="mdi:email" /> Email</span></label
+          >
           <input v-model="email" type="email" id="email" placeholder="name@company.com" />
         </div>
 
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password"
+            ><span class="icon-text"><Icon icon="mdi:lock" /> Password</span></label
+          >
           <input
             v-model="password"
             type="password"
@@ -64,7 +65,9 @@ export default {
 
         <p v-if="error" class="error-message">{{ error }}</p>
 
-        <button type="submit" class="btn-primary">Sign In</button>
+        <button type="submit" class="btn-primary">
+          <span class="icon-text"><Icon icon="mdi:login" /> Sign In</span>
+        </button>
       </form>
     </div>
   </div>
@@ -72,46 +75,52 @@ export default {
 
 <style scoped>
 .login-container {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 100vh;
   padding: 2rem;
 }
 
 .login-card {
-  background: var(--card-bg);
-  backdrop-filter: blur(10px);
-  padding: 3rem;
-  border-radius: 1rem;
-  border: 1px solid var(--card-border);
   width: 100%;
   max-width: 450px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  padding: 3rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  background: var(--bg-elevated);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 25px 50px -12px var(--shadow-color);
 }
 
 .title {
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
   font-size: 2rem;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 0.5rem;
-  color: var(--text-primary);
 }
 
 .subtitle {
-  text-align: center;
-  color: var(--text-secondary);
   margin-bottom: 2.5rem;
+  color: var(--text-secondary);
+  text-align: center;
 }
 
 .form-group {
   margin-bottom: 1.5rem;
 }
 
+.icon-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 label {
   display: block;
   margin-bottom: 0.5rem;
-  color: var(--text-heading);
+  color: var(--text-tertiary);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -119,9 +128,9 @@ label {
 input {
   width: 100%;
   padding: 0.75rem 1rem;
+  border: 1px solid var(--border-subtle);
   border-radius: 0.5rem;
-  border: 1px solid var(--card-border);
-  background: rgba(15, 23, 42, 0.5);
+  background: var(--bg-input);
   color: var(--text-primary);
   font-family: inherit;
   font-size: 1rem;
@@ -131,32 +140,28 @@ input {
 }
 
 input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
   outline: none;
-  border-color: var(--color-blue-400);
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
 }
 
 .error-message {
-  color: #ef4444;
-  font-size: 0.875rem;
   margin-bottom: 1rem;
+  color: var(--color-danger);
+  font-size: 0.875rem;
   text-align: center;
 }
 
 .btn-primary {
   width: 100%;
-  padding: 0.875rem;
   margin-top: 1rem;
-  border-radius: 0.5rem;
+  padding: 0.875rem;
   border: none;
-  background: linear-gradient(
-    135deg,
-    var(--color-blue-400) 0%,
-    var(--color-violet-400) 100%
-  );
-  color: white;
-  font-weight: 600;
+  border-radius: 0.5rem;
+  background: var(--gradient-primary);
+  color: var(--text-on-accent);
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   transition:
     opacity 0.2s,
