@@ -106,6 +106,44 @@ This application serves as a baseline for the more advanced to-do applications. 
 - **Key Files:**
   - `decorators.py`: Handles the logic for checking token expiration and regenerating tokens if the session is valid.
 
+### 7. Final To-Do App (Vue.js Frontend)
+
+- **Folder:** `07-final-todo-app`
+- **Description:** This is the finalized version of the to-do application with an improved design and a modern frontend built using Vue.js. It combines all the security features from the previous versions.
+- **Authentication:** The application uses JWT-based authentication with session-backed token regeneration, the same approach as application 06. Tokens are stored in HTTP-only cookies for security.
+- **Features:**
+  - **Vue.js Frontend:** The frontend is built using Vue.js with the Options API, providing a reactive and component-based user interface.
+  - **Improved Design:** Features a polished, modern UI with icons and better styling.
+  - **Full CRUD Operations:** Create, read, update (mark done/starred), and delete to-do items.
+  - **Authentication Flow:** Separate login page with authentication status checking on app load.
+  - **Logout Capabilities:** Supports both single-session logout and logout from all devices.
+- **Key Files:**
+  - `routes.py`: Contains all API endpoints for authentication and to-do CRUD operations.
+  - `decorators.py`: Implements the `login_required` decorator with JWT verification and token regeneration.
+  - `static/main.js`: The Vue.js application with reactive data binding and API integration.
+  - `templates/landing.html`: The landing page with application overview.
+
+### 8. Inventory Management System (Work in Progress)
+
+- **Folder:** `08-inventory-management-system`
+- **Description:** A more complex application that demonstrates role-based access control (RBAC) in a real-world inventory management scenario. This is currently a work in progress.
+- **Authentication:** Uses JWT-based authentication with Authorization Bearer headers instead of cookies. The token can be sent via the `Authorization: Bearer <token>` header or as an HTTP-only cookie.
+- **Features:**
+  - **Role-Based Access Control:** The `User` model includes a `role` attribute (admin, manager). The `login_required` decorator accepts a role parameter to restrict access to specific routes.
+  - **Admin Role:** Can manage products (create, update, delete), customers, and suppliers.
+  - **Manager Role:** Can manage orders (create, delete, mark as delivered).
+  - **Data Models:** Includes `User`, `Session`, `Product`, `Supplier`, `Customer`, `Order`, and `OrderItem` models with proper relationships.
+  - **Order Types:** Supports both incoming (from suppliers) and outgoing (to customers) orders.
+- **Architecture:**
+  - **Backend:** Flask server with SQLAlchemy ORM and organized route blueprints.
+  - **Frontend:** Built using Vite with Vue.js for a modern single-page application experience.
+- **Key Files:**
+  - `backend/models.py`: Defines all database models with proper relationships.
+  - `backend/decorators.py`: Implements role-based `login_required` decorator.
+  - `backend/routes/admin.py`: API endpoints restricted to admin users.
+  - `backend/routes/manager.py`: API endpoints restricted to manager users.
+  - `frontend/src/views/`: Vue.js views for different pages (Admin, Manager, Login, Home).
+
 ---
 
 ## Technologies Used
