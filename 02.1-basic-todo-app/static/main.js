@@ -1,7 +1,7 @@
 const html = String.raw;
 
 async function loadTodos() {
-  const response = await fetch('http://127.0.0.1:5021/todo/list');
+  const response = await fetch('/todo/list');
   const todos = await response.json();
 
   document.querySelector('#todo-list').innerHTML = '';
@@ -35,7 +35,7 @@ async function createTodo(event) {
 }
 
 async function deleteTodo(index) {
-  await fetch(`http://127.0.0.1:5021/todo/delete/${index}`);
+  await fetch(`/todo/delete/${index}`);
   loadTodos();
 }
 

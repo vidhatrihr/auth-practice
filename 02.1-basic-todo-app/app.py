@@ -1,4 +1,3 @@
-import sys
 from flask import Flask, render_template, jsonify, request
 
 # ⚠️ There is no authentication in this app
@@ -20,7 +19,7 @@ def get_todos():
 
 @app.route('/todo/create', methods=['POST'])
 def create_todo():
-  text = request.json.get('text')
+  text = request.json.get('text')  # request.json: data attached in JSON body of request
 
   todos.append(text)
   return jsonify({'message': 'Todo created'})
@@ -33,5 +32,4 @@ def delete_todo(index):
 
 
 if __name__ == '__main__':
-  port = int(sys.argv[1]) if len(sys.argv) > 1 else 5021
-  app.run(debug=True, port=port)
+  app.run(debug=True, port=5021)

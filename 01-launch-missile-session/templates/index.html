@@ -46,7 +46,7 @@
                 </form>
             </details>
 
-            <div id="auth-result">not logged in</div>
+            <div id="auth-result">Not logged in</div>
 
             <button onclick="launch()">Launch missile</button>
 
@@ -58,7 +58,7 @@
             let token = localStorage.getItem('token');
 
             if (sessionId && token) {
-                document.querySelector('#auth-result').textContent = 'already logged in';
+                document.querySelector('#auth-result').textContent = 'Already logged in';
             }
 
             document.querySelector('form').addEventListener('submit', handleLogin);
@@ -66,7 +66,7 @@
             async function handleLogin(event) {
                 event.preventDefault();
 
-                const response = await fetch('http://127.0.0.1:5000/auth/login', {
+                const response = await fetch('/auth/login', {
                     method: 'post',
                     headers: {
                         'Content-Type': 'application/json',
@@ -93,7 +93,7 @@
 
             async function launch() {
                 const response = await fetch(
-                    `http://127.0.0.1:5000/launch-missile?session_id=${sessionId}&token=${token}`
+                    `/launch-missile?session_id=${sessionId}&token=${token}`
                 );
 
                 const data = await response.json();

@@ -1,5 +1,5 @@
 {
-  "autorun": true,
+  "autorun": false,
   "autokill": true,
   "terminals": [
     {
@@ -54,7 +54,8 @@
         "start http://127.0.0.1:5041",
         "start http://127.0.0.1:5050",
         "start http://127.0.0.1:5065",
-        "start http://127.0.0.1:5070"
+        "start http://127.0.0.1:5070",
+        "exit 0"
       ]
     }
   ]
