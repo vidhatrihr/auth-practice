@@ -3,6 +3,15 @@ import { ref, computed, onMounted } from 'vue';
 import { api } from '@/utils/api';
 import { authStore } from '@/stores/auth';
 import { Icon } from '@iconify/vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+async function logout(everywhere = false) {
+  await api('get', `/auth/logout${everywhere ? '-everywhere' : ''}`);
+  authStore.logout();
+  router.push('/login');
+}
 
 const orders = ref([]);
 
@@ -14,18 +23,18 @@ onMounted(async () => {
 });
 
 async function loadOrders() {
-  const res = await api('get', '/manager/orders');
+  const res = await api('get', '/orders');
   if (res.success) orders.value = res.payload.orders;
 }
 
 async function deleteOrder(id) {
-  const res = await api('delete', `/manager/orders/${id}`);
+  const res = await api('delete', `/orders/${id}`);
   if (res.success) await loadOrders();
   else alert(res.message);
 }
 
 async function markDelivered(id) {
-  const res = await api('patch', `/manager/orders/${id}/deliver`);
+  const res = await api('patch', `/orders/${id}/deliver`);
   if (res.success) await loadOrders();
   else alert(res.message);
 }
@@ -37,23 +46,29 @@ function formatDate(iso) {
 </script>
 
 <template>
-  <div class="manager-container">
-    <div class="manager-card">
-      <h1 class="title">
+  <div class="page">
+    <div class="container" style="max-width: 1000px">
+      <h1>
         <span class="icon-text"
           ><Icon icon="mdi:view-dashboard" /> Manager Dashboard</span
         >
       </h1>
-      <p class="subtitle">Welcome, {{ authStore.user.name }}</p>
+      <p class="muted mb-sm">Welcome, {{ authStore.user.name }}</p>
+      <div class="flex gap-sm mb-sm">
+        <button class="btn btn-sm" @click="logout()">Log out</button>
+        <button class="btn btn-sm btn-danger" @click="logout(true)">
+          Log out everywhere
+        </button>
+      </div>
 
       <!-- INCOMING ORDERS -->
-      <section class="section">
+      <section>
         <h2>
           <span class="icon-text"
             ><Icon icon="mdi:truck-delivery" /> Incoming Orders (from Suppliers)</span
           >
         </h2>
-        <table class="orders-table">
+        <table>
           <thead>
             <tr>
               <th>ID</th>
@@ -78,25 +93,27 @@ function formatDate(iso) {
                 </span>
               </td>
               <td>
-                <span :class="['status', order.status]">{{ order.status }}</span>
+                <span
+                  :class="[
+                    'status',
+                    order.status === 'pending' ? 'status-pending' : 'status-delivered',
+                  ]"
+                >
+                  {{ order.status }}
+                </span>
               </td>
               <td>{{ formatDate(order.dateCreated) }}</td>
               <td>{{ formatDate(order.dateDelivered) }}</td>
               <td>
                 <template v-if="order.status === 'pending'">
-                  <button
-                    class="btn btn-small btn-success"
-                    @click="markDelivered(order.id)"
-                  >
-                    <span class="icon-text"
-                      ><Icon icon="mdi:check" /> Mark Delivered</span
-                    >
+                  <button class="btn btn-sm btn-success" @click="markDelivered(order.id)">
+                    <span class="icon-text"><Icon icon="mdi:check" /> Delivered</span>
                   </button>
-                  <button class="btn btn-small btn-danger" @click="deleteOrder(order.id)">
+                  <button class="btn btn-sm btn-danger" @click="deleteOrder(order.id)">
                     <span class="icon-text"><Icon icon="mdi:delete" /> Delete</span>
                   </button>
                 </template>
-                <span v-else class="done"><Icon icon="mdi:check-circle" /></span>
+                <span v-else style="color: #2c5"><Icon icon="mdi:check-circle" /></span>
               </td>
             </tr>
             <tr v-if="incomingOrders.length === 0">
@@ -107,13 +124,13 @@ function formatDate(iso) {
       </section>
 
       <!-- OUTGOING ORDERS -->
-      <section class="section">
+      <section>
         <h2>
           <span class="icon-text"
             ><Icon icon="mdi:cart-arrow-right" /> Outgoing Orders (to Customers)</span
           >
         </h2>
-        <table class="orders-table">
+        <table>
           <thead>
             <tr>
               <th>ID</th>
@@ -138,25 +155,27 @@ function formatDate(iso) {
                 </span>
               </td>
               <td>
-                <span :class="['status', order.status]">{{ order.status }}</span>
+                <span
+                  :class="[
+                    'status',
+                    order.status === 'pending' ? 'status-pending' : 'status-delivered',
+                  ]"
+                >
+                  {{ order.status }}
+                </span>
               </td>
               <td>{{ formatDate(order.dateCreated) }}</td>
               <td>{{ formatDate(order.dateDelivered) }}</td>
               <td>
                 <template v-if="order.status === 'pending'">
-                  <button
-                    class="btn btn-small btn-success"
-                    @click="markDelivered(order.id)"
-                  >
-                    <span class="icon-text"
-                      ><Icon icon="mdi:check" /> Mark Delivered</span
-                    >
+                  <button class="btn btn-sm btn-success" @click="markDelivered(order.id)">
+                    <span class="icon-text"><Icon icon="mdi:check" /> Delivered</span>
                   </button>
-                  <button class="btn btn-small btn-danger" @click="deleteOrder(order.id)">
+                  <button class="btn btn-sm btn-danger" @click="deleteOrder(order.id)">
                     <span class="icon-text"><Icon icon="mdi:delete" /> Delete</span>
                   </button>
                 </template>
-                <span v-else class="done"><Icon icon="mdi:check-circle" /></span>
+                <span v-else style="color: #2c5"><Icon icon="mdi:check-circle" /></span>
               </td>
             </tr>
             <tr v-if="outgoingOrders.length === 0">
@@ -168,132 +187,3 @@ function formatDate(iso) {
     </div>
   </div>
 </template>
-
-<style scoped>
-.manager-container {
-  min-height: 100vh;
-  padding: 2rem;
-}
-
-.manager-card {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem;
-  border: 1px solid var(--border-subtle);
-  border-radius: 1rem;
-  background: var(--bg-elevated);
-  backdrop-filter: blur(10px);
-}
-
-.icon-text {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.title {
-  margin-bottom: 0.5rem;
-  color: var(--text-primary);
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-.subtitle {
-  margin-bottom: 2rem;
-  color: var(--text-secondary);
-}
-
-.section {
-  margin-bottom: 2rem;
-}
-
-.section h2 {
-  margin-bottom: 1rem;
-  color: var(--text-tertiary);
-  font-size: 1.25rem;
-}
-
-/* Table */
-.orders-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.orders-table th,
-.orders-table td {
-  padding: 0.75rem 0.5rem;
-  border-bottom: 1px solid var(--border-subtle);
-  text-align: left;
-}
-
-.orders-table th {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.orders-table td {
-  color: var(--text-primary);
-}
-
-.empty {
-  color: var(--text-secondary);
-  font-style: italic;
-  text-align: center;
-}
-
-/* Status badges */
-.status {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.status.pending {
-  background: var(--color-warning);
-  color: var(--text-inverse);
-}
-
-.status.delivered {
-  background: var(--color-success);
-  color: var(--text-on-accent);
-}
-
-.done {
-  color: var(--color-success);
-  font-weight: bold;
-}
-
-/* Buttons */
-.btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn:hover {
-  opacity: 0.9;
-}
-
-.btn-small {
-  margin-right: 0.25rem;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-}
-
-.btn-success {
-  background: var(--color-success);
-  color: var(--text-on-accent);
-}
-
-.btn-danger {
-  background: var(--color-danger);
-  color: var(--text-on-accent);
-}
-</style>

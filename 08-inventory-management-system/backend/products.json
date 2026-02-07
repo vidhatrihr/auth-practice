@@ -1,0 +1,17 @@
+[
+  { "name": "Shampoo", "cost_price": 120, "selling_price": 150, "qty_available": 50 },
+  { "name": "Biscuits", "cost_price": 20, "selling_price": 30, "qty_available": 200 },
+  { "name": "Toothpaste", "cost_price": 45, "selling_price": 60, "qty_available": 80 },
+  { "name": "Soap Bar", "cost_price": 25, "selling_price": 35, "qty_available": 150 },
+  { "name": "Rice (1kg)", "cost_price": 50, "selling_price": 65, "qty_available": 100 },
+  {
+    "name": "Cooking Oil (1L)",
+    "cost_price": 140,
+    "selling_price": 170,
+    "qty_available": 60
+  },
+  { "name": "Sugar (1kg)", "cost_price": 40, "selling_price": 50, "qty_available": 120 },
+  { "name": "Tea Powder", "cost_price": 90, "selling_price": 110, "qty_available": 70 },
+  { "name": "Detergent", "cost_price": 80, "selling_price": 100, "qty_available": 90 },
+  { "name": "Hand Sanitizer", "cost_price": 60, "selling_price": 80, "qty_available": 40 }
+]

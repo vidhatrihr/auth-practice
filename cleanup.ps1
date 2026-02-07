@@ -1,0 +1,1 @@
+Get-ChildItem -Recurse -Directory -Include "__pycache__", "instance" | Remove-Item -Recurse -Force -Verbose

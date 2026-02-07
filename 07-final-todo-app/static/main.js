@@ -8,18 +8,21 @@ const template = html`
       <summary class="icon-text" v-if="isAuthenticated">
         <iconify-icon icon="mdi:check-circle"></iconify-icon> {{ authResult }}
       </summary>
+
       <summary class="icon-text" v-else-if="authChecked">
         <iconify-icon icon="mdi:alert-circle"></iconify-icon> Please
         <a href="/login">sign in</a> to continue
       </summary>
+
       <summary class="icon-text" v-else>
         <iconify-icon icon="eos-icons:loading"></iconify-icon> Checking...
       </summary>
+
       <div class="button-group">
-        <button @click="logout">
+        <button class="btn" @click="logout">
           <iconify-icon icon="mdi:logout"></iconify-icon> Logout
         </button>
-        <button @click="logoutEverywhere">
+        <button class="btn" @click="logoutEverywhere">
           <iconify-icon icon="mdi:logout-variant"></iconify-icon> All devices
         </button>
       </div>
@@ -33,7 +36,7 @@ const template = html`
         <input type="text" v-model="todoText" placeholder="What needs to be done?" />
       </label>
 
-      <button>
+      <button class="btn">
         <iconify-icon icon="mdi:plus"></iconify-icon>
         Add todo
       </button>
@@ -42,12 +45,15 @@ const template = html`
 
   <section>
     <p v-if="todos.length === 0">No todos yet</p>
+
     <ul v-else>
       <li v-for="todo in todos" :key="todo.id">
         <span @click="deleteTodo(todo.id)">×</span>
+
         <span :class="{ done: todo.isDone }" @click="markDone(todo.id)">
           {{ todo.text }}
         </span>
+
         <span :class="{ star: todo.isStarred }" @click="markStarred(todo.id)">
           {{ todo.isStarred ? '★' : '☆' }}
         </span>
@@ -58,6 +64,7 @@ const template = html`
 
 createApp({
   template,
+
   data() {
     return {
       todos: [],

@@ -1,9 +1,8 @@
 async function api(method, path, params = {}) {
-  const baseUrl = 'http://127.0.0.1:5070';
   const options = {
     method: method,
   };
-  let url;
+  let url = path;
 
   if (method == 'post') {
     // POST - send params as JSON body
@@ -11,13 +10,12 @@ async function api(method, path, params = {}) {
       'Content-Type': 'application/json',
     };
     options.body = JSON.stringify(params);
-    url = `${baseUrl}${path}`;
   } else {
     // GET, PATCH, DELETE - send params as query string
     const query = new URLSearchParams({
       ...params,
     }).toString();
-    url = `${baseUrl}${path}?${query}`;
+    url += `?${query}`;
   }
 
   const response = await fetch(url, options);

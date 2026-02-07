@@ -1,74 +1,221 @@
-:root {
-  /*
-   * Base Palette (Tailwind Slate + Blue/Violet)
-   * Slate: 900=#0f172a, 800=#1e293b, 700=#334155, 400=#94a3b8, 200=#e2e8f0, 50=#f8fafc
-   * Blue: 400=#60a5fa, 500=#3b82f6
-   * Violet: 400=#a78bfa
-   */
-
-  /* Backgrounds */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-elevated: rgba(30, 41, 59, 0.7);
-  --bg-input: rgba(15, 23, 42, 0.6);
-
-  /* Text */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-tertiary: #e2e8f0;
-  --text-on-accent: #ffffff;
-  --text-inverse: #0f172a;
-
-  /* Accent */
-  --accent-primary: #60a5fa;
-  --accent-secondary: #a78bfa;
-
-  /* Status */
-  --color-success: #22c55e;
-  --color-danger: #ef4444;
-  --color-warning: #fbbf24;
-
-  /* Borders & Shadows */
-  --border-subtle: rgba(148, 163, 184, 0.15);
-  --border-accent: rgba(96, 165, 250, 0.4);
-  --shadow-color: rgba(0, 0, 0, 0.25);
-
-  /* Focus Ring */
-  --focus-ring: rgba(96, 165, 250, 0.35);
-
-  /* Gradient */
-  --gradient-primary: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-}
-
-/* Base Styles */
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: inherit;
-  color: inherit;
-}
-
-iconify-icon {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
 }
 
 body {
-  min-height: 100vh;
-  color: var(--text-primary);
-  background: var(--bg-primary);
-  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.6;
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  background: #111;
+  color: #eee;
 }
 
 a {
-  text-decoration: none;
-  color: var(--accent-primary);
-  transition: 0.4s;
+  color: #6af;
 }
 
-a:hover {
-  background-color: hsla(160, 100%, 37%, 0.2);
+/* Layout */
+.page {
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.page-center {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.container-sm {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Typography */
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.muted {
+  color: #888;
+}
+.error {
+  color: #f44;
+}
+
+.icon-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Sections */
+section {
+  margin-bottom: 1.5rem;
+}
+
+/* Forms */
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.5rem;
+  background: #222;
+  border: 1px solid #333;
+  color: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 1px solid #6af;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.form-row input {
+  flex: 1 1 120px;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.4rem 0.75rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-block {
+  width: 100%;
+}
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+.btn-primary {
+  background: #6af;
+  color: #000;
+}
+.btn-secondary {
+  background: #444;
+  color: #eee;
+}
+.btn-danger {
+  background: #f44;
+  color: #fff;
+}
+.btn-success {
+  background: #2c5;
+  color: #fff;
+}
+
+/* Accordion */
+details {
+  margin-bottom: 0.75rem;
+  border: 1px solid #333;
+}
+summary {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+/* Lists */
+ul {
+  list-style: none;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #333;
+  text-align: left;
+}
+th {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.empty {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Status badges */
+.status {
+  display: inline-block;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background: #fb0;
+  color: #000;
+}
+.status-delivered,
+.status-success {
+  background: #2c5;
+  color: #fff;
+}
+
+/* Utility */
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.gap-sm {
+  gap: 0.5rem;
+}
+.mt-sm {
+  margin-top: 0.5rem;
+}
+.mb-sm {
+  margin-bottom: 0.5rem;
 }

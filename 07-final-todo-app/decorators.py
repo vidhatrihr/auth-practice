@@ -37,9 +37,11 @@ def login_required(fn):
     if time.time() > payload['iat'] + TOKEN_EXPIRATION_SECONDS:
       session = Session.query.filter_by(id=payload['session_id']).first()
       if session:
+        # Regenerate the token
         payload['iat'] = int(time.time())
         new_token = jwt_encode(payload)
       else:
+        # Invalid session
         return jsonify({'success': False, 'message': 'Unauthorized'}), 401
 
     if count_parameters == 0:

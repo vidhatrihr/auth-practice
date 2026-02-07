@@ -17,9 +17,6 @@ def verify_jwt():
     if auth_header.startswith('Bearer '):
       token = auth_header.split(' ')[1]
 
-  if not token:
-    token = request.cookies.get('jwt')
-
   if token:
     try:
       payload = jwt_decode(token)
@@ -29,7 +26,14 @@ def verify_jwt():
   return None
 
 
-def login_required(role=None):
+def role_required(roles=None):
+  """
+  Decorator to require specific role(s) for a route.
+
+  Args:
+    roles: Can be None (any authenticated user), a single role string, 
+           or a list of role strings (user must have one of them).
+  """
   def decorator(fn):
     # How many parameters defined by view function (fn)
     count_parameters = len(inspect.signature(fn).parameters)
@@ -43,8 +47,11 @@ def login_required(role=None):
         return jsonify({'success': False, 'message': 'Unauthorized'}), 401
 
       # Check role if specified
-      if role and payload.get('role') != role:
-        return jsonify({'success': False, 'message': 'Forbidden'}), 403
+      if roles:
+        # Normalize to list
+        allowed_roles = roles if isinstance(roles, list) else [roles]
+        if payload.get('role') not in allowed_roles:
+          return jsonify({'success': False, 'message': 'Forbidden'}), 403
 
       # Check if the token has expired
       if time.time() > payload['iat'] + TOKEN_EXPIRATION_SECONDS:

@@ -8,15 +8,15 @@ const template = html`
     <form @submit.prevent="handleLogin">
       <label>
         Email
-        <input type="email" v-model="email" placeholder="you@example.com" />
+        <input type="email" v-model="email" />
       </label>
 
       <label>
         Password
-        <input type="password" v-model="password" placeholder="••••••••" />
+        <input type="password" v-model="password" />
       </label>
 
-      <button>
+      <button class="btn">
         <iconify-icon icon="mdi:arrow-right"></iconify-icon>
         Sign in
       </button>
@@ -28,6 +28,7 @@ const template = html`
 
 createApp({
   template,
+
   data() {
     return {
       email: 'vidu@example.com',
@@ -44,13 +45,6 @@ createApp({
       });
 
       if (data.success) {
-        localStorage.setItem(
-          'session',
-          JSON.stringify({
-            message: data.message,
-            loggedIn: true,
-          }),
-        );
         window.location.href = '/app';
       } else {
         this.authResult = data.message;

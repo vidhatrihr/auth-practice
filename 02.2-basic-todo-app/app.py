@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 class Todo:
   # ⚠️ There is no database in this app
-  table = {}  # id -> todo objects
+  table = {}  # map: id -> todo objects
   next_id = 0  # id that should be assigned to next todo object
 
   def __init__(self, text):

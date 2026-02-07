@@ -3,13 +3,13 @@ from flask import Blueprint, jsonify, request
 from werkzeug.security import check_password_hash
 from models import db, User, Session
 from jwt import jwt_encode
-from decorators import login_required
+from decorators import role_required
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
 @auth_bp.route('/whoami')
-@login_required()
+@role_required()
 def whoami(payload):
   user = User.query.filter_by(id=payload['user_id']).first()
   return jsonify({
@@ -63,7 +63,7 @@ def login():
 
 
 @auth_bp.route('/logout')
-@login_required()
+@role_required()
 def logout(payload):
   # Delete current session
   session = Session.query.filter_by(id=payload['session_id']).first()
@@ -76,7 +76,7 @@ def logout(payload):
 
 
 @auth_bp.route('/logout-everywhere')
-@login_required()
+@role_required()
 def logout_everywhere(payload):
   # Delete all sessions for the given user
   Session.query.filter_by(user_id=payload['user_id']).delete()

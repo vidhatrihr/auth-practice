@@ -7,6 +7,6 @@ def populate_db():
     db.session.add(User(
         name='vidu',
         email='vidu@example.com',
-        password=generate_password_hash('fish')
+        password=generate_password_hash('qwerty')
     ))
     db.session.commit()

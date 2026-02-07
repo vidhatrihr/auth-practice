@@ -1,3 +1,4 @@
+import json
 from models import db, User, Product, Supplier, Customer, Order, OrderItem
 from werkzeug.security import generate_password_hash
 
@@ -23,15 +24,11 @@ def populate_db():
 
   db.session.add_all([admin, manager])
 
-  # Create Products
-  products = []
-  for i in range(1, 11):
-    products.append(Product(
-        name=f'Product {i}',
-        cost_price=10.0 * i,
-        selling_price=15.0 * i,
-        qty_available=100
-    ))
+  # Create Products from JSON
+  with open('products.json') as f:
+    product_data = json.load(f)
+
+  products = [Product(**p) for p in product_data]
 
   db.session.add_all(products)
 

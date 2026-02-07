@@ -20,7 +20,7 @@ async function api(method, path, params = {}) {
       ...params,
     }).toString();
 
-    url = `http://127.0.0.1:5065${path}?${query}`;
+    url = `${path}?${query}`;
   }
 
   if (method == 'post') {
@@ -29,7 +29,7 @@ async function api(method, path, params = {}) {
     };
     options.body = JSON.stringify(params);
 
-    url = `http://127.0.0.1:5065${path}`;
+    url = `${path}`;
   }
 
   const response = await fetch(url, options);
